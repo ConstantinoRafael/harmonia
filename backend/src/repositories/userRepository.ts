@@ -1,14 +1,8 @@
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import prisma from "../config/db";
 
-export interface CreateUserDTO {
-  name: string;
-  email: string;
-  password: string;
-}
-
 export const userRepository = {
-  async create(userData: CreateUserDTO): Promise<User> {
+  async create(userData: Prisma.UserCreateInput): Promise<User> {
     return prisma.user.create({ data: userData });
   },
 

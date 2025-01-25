@@ -6,8 +6,11 @@ export const userController = {
     const { name, email, password } = req.body;
 
     try {
-      const message = await userService.create({ name, email, password });
-      res.status(201).send({ message });
+      const newUser = await userService.create({ name, email, password });
+
+      const { password: _, ...userWithoutPassword } = newUser;
+
+      res.status(201).send(userWithoutPassword);
     } catch (error: any) {
       res.status(400).send({ message: error.message });
     }
