@@ -455,6 +455,42 @@ também são utilizados recursos cênicos com o grupo.`,
       address: "Rua Uruguai 317 - Sala 3 - Tijuca - RJ",
       isInfantojuvenil: false,
     },
+    {
+      title: "Harmonia Vocal - Infantojuvenil (até 16 anos)",
+      description: `Venha trabalhar a musicalização e o canto em conjunto! Nesse workshop, os alunos terão a
+      oportunidade de ter um primeiro contato com a magia da harmonia vocal através do repertório de
+      grandes sucessos da Broadway, desenvolvendo o ouvido musical adquirindo noções de afinação,
+      ritmo e timbragem.`,
+      professorName: "Caio Loureiro",
+      date: new Date("2025-02-23T10:00:00.000Z"),
+      duration: 180, // 3 horas
+      capacity: 20,
+      address: "Rua Uruguai 317 - Sala 3 - Tijuca - RJ",
+      isInfantojuvenil: true,
+    },
+    {
+      title: "Sapateado e Harmonia Vocal",
+      description: `Nesse workshop aprenderemos um arranjo vocal que traz o sapateado como uma de suas
+      linguagens. Coordenação motora, ritmo e precisão: tudo isso aliado à exigência do canto em
+      grupo.`,
+      professorName: "Marcela Pires & Tony Lucchesi",
+      date: new Date("2025-02-23T14:00:00.000Z"),
+      duration: 180, // 3 horas
+      capacity: 20,
+      address: "Rua Uruguai 317 - Sala 3 - Tijuca - RJ",
+      isInfantojuvenil: false,
+    },
+    {
+      title: "Gestalt da Palavra",
+      description: `O workshop promove um mergulho no desenvolvimento da interpretação da canção, através da
+      pesquisa minuciosa da palavra, resultando numa eficiente comunicação do texto na cena.`,
+      professorName: "Victor Maia",
+      date: new Date("2025-02-23T11:00:00.000Z"),
+      duration: 120, // 2 horas
+      capacity: 20,
+      address: "Rua General Espírito Santo - 57A - Tijuca - RJ",
+      isInfantojuvenil: false,
+    },
   ];
 
   // Inserindo os workshops no banco
