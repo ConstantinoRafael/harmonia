@@ -6,16 +6,16 @@ export const workshopService = {
     return workshopRepository.create(workshopData);
   },
 
-  async getById(id: string): Promise<Workshop | null> {
+  async getById(id: number): Promise<Workshop | null> {
     return workshopRepository.findById(id);
   },
 
-  async getAll(): Promise<Workshop[]> {
-    return workshopRepository.findAll();
+  async getAll(isInfantojuvenil?: boolean): Promise<Workshop[]> {
+    return workshopRepository.findAll(isInfantojuvenil);
   },
 
   async update(
-    id: string,
+    id: number,
     workshopData: Prisma.WorkshopUpdateInput
   ): Promise<Workshop> {
     const existingWorkshop = await workshopRepository.findById(id);
@@ -26,7 +26,7 @@ export const workshopService = {
     return workshopRepository.update(id, workshopData);
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     const existingWorkshop = await workshopRepository.findById(id);
     if (!existingWorkshop) {
       throw new Error("Workshop não encontrado!");

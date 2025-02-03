@@ -6,25 +6,28 @@ export const workshopRepository = {
     return prisma.workshop.create({ data: workshopData });
   },
 
-  async findById(id: string): Promise<Workshop | null> {
+  async findById(id: number): Promise<Workshop | null> {
     return prisma.workshop.findUnique({
       where: { id },
       include: { registrations: true },
     });
   },
 
-  async findAll(): Promise<Workshop[]> {
-    return prisma.workshop.findMany({ include: { registrations: true } });
+  async findAll(isInfantojuvenil?: boolean): Promise<Workshop[]> {
+    return prisma.workshop.findMany({
+      where: isInfantojuvenil !== undefined ? { isInfantojuvenil } : {},
+      include: { registrations: true },
+    });
   },
 
   async update(
-    id: string,
+    id: number,
     workshopData: Prisma.WorkshopUpdateInput
   ): Promise<Workshop> {
     return prisma.workshop.update({ where: { id }, data: workshopData });
   },
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     await prisma.workshop.delete({ where: { id } });
   },
 };
