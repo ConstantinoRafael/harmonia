@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import Image from "next/image";
 import { useState } from "react";
+import Logo from "../../../public/assets/miniatura-harmonia-light.png";
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -28,7 +30,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data) => {
     setLoading(true);
     setErrorMessage("");
 
@@ -47,13 +49,12 @@ export default function Login() {
 
       const user = await response.json();
 
-      // Verifica se o usuário é admin e redireciona
       if (user.isAdmin) {
         router.push("/admin");
       } else {
         router.push("/workshop");
       }
-    } catch (error: any) {
+    } catch (error) {
       setErrorMessage(error.message);
     } finally {
       setLoading(false);
@@ -61,16 +62,42 @@ export default function Login() {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
+    <Box
+      sx={{
+        backgroundColor: "#E9E9E9", // Fundo com a cor do fundo da imagem
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* Imagem no topo */}
+
+      <Container
+        maxWidth="xs"
         sx={{
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          backgroundColor: "#FFF", // Fundo branco para o formulário
+          borderRadius: 2,
+          p: 3,
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
         }}
       >
-        <Typography variant="h5">Login</Typography>
+        <Box sx={{ textAlign: "center", mb: 3 }}>
+          <Image
+            src={Logo} // Substitua pelo caminho correto
+            alt="Logo"
+          />
+        </Box>
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#6985B5", // Azul semelhante ao texto da imagem
+            textAlign: "center",
+          }}
+        >
+          Login
+        </Typography>
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -83,6 +110,7 @@ export default function Login() {
             {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
+            InputLabelProps={{ style: { color: "#6985B5" } }}
           />
           <TextField
             label="Senha"
@@ -92,6 +120,7 @@ export default function Login() {
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
+            InputLabelProps={{ style: { color: "#6985B5" } }}
           />
           {errorMessage && (
             <Typography color="error" variant="body2" sx={{ mt: 1 }}>
@@ -102,13 +131,18 @@ export default function Login() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3 }}
+            sx={{
+              mt: 3,
+              backgroundColor: "#FFD700", // Botão amarelo
+              color: "#6985B5",
+              "&:hover": { backgroundColor: "#FFC107" },
+            }}
             disabled={loading}
           >
             {loading ? "Entrando..." : "Entrar"}
           </Button>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 }

@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import Image from "next/image";
+import Logo from "../../../public/assets/minuatura-harmonia.png";
 
 const registerSchema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -29,22 +31,44 @@ export default function Register() {
 
   const router = useRouter();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data) => {
     console.log("Cadastro:", data);
-    router.push("/login"); // Redireciona para login após cadastro (pode ser ajustado)
+    router.push("/login");
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
+    <Box
+      sx={{
+        backgroundColor: "#000",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#fff",
+      }}
+    >
+      {/* Adicionando a Imagem no Topo */}
+
+      <Container
+        maxWidth="xs"
         sx={{
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          backgroundColor: "#211D1D",
+          borderRadius: 2,
+          p: 3,
+          color: "#fff",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
         }}
       >
-        <Typography variant="h5">Cadastro</Typography>
+        <Box sx={{ textAlign: "center", mb: 3 }}>
+          <Image
+            src={Logo} // Altere para o caminho da sua imagem
+            alt="Logo"
+          />
+        </Box>
+        <Typography variant="h5" sx={{ color: "#FFCE2A", textAlign: "center" }}>
+          Cadastro
+        </Typography>
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -57,6 +81,8 @@ export default function Register() {
             {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
+            InputLabelProps={{ style: { color: "#fff" } }}
+            InputProps={{ style: { color: "#fff", borderColor: "#fff" } }}
           />
           <TextField
             label="Senha"
@@ -66,6 +92,8 @@ export default function Register() {
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
+            InputLabelProps={{ style: { color: "#fff" } }}
+            InputProps={{ style: { color: "#fff", borderColor: "#fff" } }}
           />
           <TextField
             label="Confirmar Senha"
@@ -75,12 +103,25 @@ export default function Register() {
             {...register("confirmPassword")}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
+            InputLabelProps={{ style: { color: "#fff" } }}
+            InputProps={{ style: { color: "#fff", borderColor: "#fff" } }}
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 3,
+              backgroundColor: "#FFCE2A",
+              color: "#000",
+              fontWeight: "bold",
+              "&:hover": { backgroundColor: "#FFC107" },
+            }}
+          >
             Criar Conta
           </Button>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 }

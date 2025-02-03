@@ -14,17 +14,12 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const drawerWidth = 240;
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
@@ -32,22 +27,28 @@ export default function AdminLayout({
     setMobileOpen(!mobileOpen);
   };
 
+  const handleNavigation = (path) => {
+    router.push(path);
+    setMobileOpen(false); // Fecha o Drawer após a navegação
+  };
+
   const handleLogout = () => {
-    // Aqui pode limpar o token do usuário
+    // Aqui você pode limpar o token do usuário
     console.log("Usuário deslogado");
     router.push("/login"); // Redireciona para a tela de login
+    setMobileOpen(false); // Fecha o Drawer após o logout
   };
 
   const drawer = (
     <Box sx={{ width: drawerWidth }}>
       <List>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => router.push("/admin")}>
-            <ListItemText primary="Dashboard" />
+          <ListItemButton onClick={() => handleNavigation("/admin/workshops")}>
+            <ListItemText primary="Workshops" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton onClick={() => router.push("/admin/users")}>
+          <ListItemButton onClick={() => handleNavigation("/admin/users")}>
             <ListItemText primary="Usuários" />
           </ListItemButton>
         </ListItem>
