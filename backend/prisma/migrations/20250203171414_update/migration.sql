@@ -1,10 +1,11 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+    "age" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -13,12 +14,15 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Workshop" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "professorName" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "duration" INTEGER NOT NULL,
     "capacity" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
+    "isInfantojuvenil" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -27,9 +31,9 @@ CREATE TABLE "Workshop" (
 
 -- CreateTable
 CREATE TABLE "Registration" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "workshopId" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "workshopId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Registration_pkey" PRIMARY KEY ("id")
