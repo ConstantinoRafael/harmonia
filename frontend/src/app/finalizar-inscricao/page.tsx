@@ -153,8 +153,7 @@ const FinalizarInscricao = () => {
           <br />
           <strong>Celular: 2199223-9843</strong>
           <br />
-          Enviar comprovante para{" "}
-          <strong>harmoniavocalteatromusical@gmail.com</strong>
+          Enviar comprovante para <strong>tergmusical@gmail.com</strong>
         </Typography>
 
         <form onSubmit={handleSubmit}>

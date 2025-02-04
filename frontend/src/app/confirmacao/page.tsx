@@ -36,7 +36,7 @@ const Confirmacao = () => {
           e-mail:
           <br />
           <strong style={{ color: "#FA1FF7" }}>
-            harmoniavocalteatromusical@gmail.com
+            tergmusical@gmail.com
           </strong>{" "}
           <br />
           para confirmar sua inscrição.
