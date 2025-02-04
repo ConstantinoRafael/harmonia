@@ -1,12 +1,10 @@
 import app from "./app";
-import http from "http";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const server = http.createServer(app);
-
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Exportando o Express como uma função handler para Vercel
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  return app(req, res);
+}
