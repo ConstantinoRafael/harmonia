@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -30,7 +31,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     setLoading(true);
     setErrorMessage("");
 
@@ -54,7 +55,7 @@ export default function Login() {
       } else {
         router.push("/workshop");
       }
-    } catch (error) {
+    } catch (error: any) {
       setErrorMessage(error.message);
     } finally {
       setLoading(false);

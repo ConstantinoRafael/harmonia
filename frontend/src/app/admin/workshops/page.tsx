@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -70,13 +71,13 @@ export default function WorkshopsPage() {
     handleClose();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: number) => {
     setWorkshops((prevWorkshops) =>
       prevWorkshops.filter((workshop) => workshop.id !== id)
     );
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setCurrentWorkshop((prevWorkshop) => ({ ...prevWorkshop, [name]: value }));
   };

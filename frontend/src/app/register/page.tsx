@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -31,7 +32,7 @@ export default function Register() {
 
   const router = useRouter();
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     console.log("Cadastro:", data);
     router.push("/login");
   };

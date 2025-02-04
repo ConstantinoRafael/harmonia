@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Card,
@@ -15,7 +16,7 @@ import {
 import InfoIcon from "@mui/icons-material/Info"; // Ícone ℹ️
 
 const WorkshopList = ({ workshops, addToCart, cart = [] }: any) => {
-  const [selectedWorkshop, setSelectedWorkshop] = useState(null);
+  const [selectedWorkshop, setSelectedWorkshop] = useState<any>(null);
   const [open, setOpen] = useState(false);
 
   const handleOpen = (workshop: any) => {
