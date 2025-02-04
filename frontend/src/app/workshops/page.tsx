@@ -12,7 +12,7 @@ const WorkshopsInfantojuvenis = () => {
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/workshops?isInfantojuvenil=false")
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/workshops?isInfantojuvenil=false`)
       .then((res) => res.json())
       .then((data) => setWorkshops(data))
       .catch((err) => console.error("Erro ao buscar workshops:", err));

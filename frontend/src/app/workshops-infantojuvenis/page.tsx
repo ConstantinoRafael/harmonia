@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Cart from "@/components/cart";
@@ -7,22 +8,29 @@ import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 
 const WorkshopsInfantojuvenis = () => {
-  const [workshops, setWorkshops] = useState([]);
-  const [cart, setCart] = useState([]);
+  interface Workshop {
+    id: number;
+    title: string;
+    // Add other properties if needed
+  }
+
+  const [workshops, setWorkshops] = useState<Workshop[]>([]);
+  const [cart, setCart] = useState<Workshop[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/workshops?isInfantojuvenil=true") // Apenas infantojuvenis
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/workshops?isInfantojuvenil=true`) // Apenas infantojuvenis
       .then((res) => res.json())
       .then((data) => setWorkshops(data))
       .catch((err) => console.error("Erro ao buscar workshops:", err));
   }, []);
 
   const addToCart = (id: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const selectedWorkshop = workshops.find((w: any) => w.id === id);
     if (!selectedWorkshop) return;
 
-    let workshopsToAdd = [selectedWorkshop];
+    const workshopsToAdd = [selectedWorkshop];
 
     // Se for "Parte 1", busca "Parte 2" correspondente
     if (selectedWorkshop.title.includes("Parte 1")) {
@@ -69,7 +77,7 @@ const WorkshopsInfantojuvenis = () => {
     if (!selectedWorkshop) return;
 
     // Encontrar o "Par" correspondente
-    let workshopsToRemove = [selectedWorkshop];
+    const workshopsToRemove = [selectedWorkshop];
 
     if (selectedWorkshop.title.includes("Parte 1")) {
       const part2Workshop = cart.find(
