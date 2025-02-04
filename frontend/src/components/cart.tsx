@@ -13,15 +13,12 @@ import {
   Divider,
   Box,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete"; // Ícone de lixeira 🗑️
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useRouter } from "next/navigation"; // Importa roteamento
 
-const Cart = ({
-  open,
-  onClose,
-  cartItems,
-  handleSubmit,
-  removeFromCart,
-}: any) => {
+const Cart = ({ open, onClose, cartItems, removeFromCart }: any) => {
+  const router = useRouter(); // Habilita navegação
+
   // Calcula o total (R$ 60 por workshop)
   const total = cartItems.length * 60;
 
@@ -32,8 +29,8 @@ const Cart = ({
       fullWidth
       sx={{
         "& .MuiPaper-root": {
-          backgroundColor: "#211D1D", // Fundo menos escuro
-          color: "#FFFFFF", // Texto branco
+          backgroundColor: "#211D1D",
+          color: "#FFFFFF",
         },
       }}
     >
@@ -51,7 +48,7 @@ const Cart = ({
                 secondaryAction={
                   <IconButton
                     edge="end"
-                    sx={{ color: "#FA1FF7" }} // Ícone da lixeira na cor do carrinho
+                    sx={{ color: "#FA1FF7" }}
                     onClick={() => removeFromCart(item.id)}
                   >
                     <DeleteIcon />
@@ -64,8 +61,8 @@ const Cart = ({
                     item.date
                   ).toLocaleDateString("pt-BR")}`}
                   sx={{
-                    color: "#FFFFFF", // Garante que o título seja branco
-                    "& .MuiTypography-body2": { color: "#FFFFFF" }, // Garante que o texto secundário também fique branco
+                    color: "#FFFFFF",
+                    "& .MuiTypography-body2": { color: "#FFFFFF" },
                   }}
                 />
               </ListItem>
@@ -74,7 +71,6 @@ const Cart = ({
         )}
       </DialogContent>
 
-      {/* Somatório do total */}
       {cartItems.length > 0 && (
         <>
           <Divider sx={{ backgroundColor: "#FFFFFF" }} />
@@ -101,8 +97,12 @@ const Cart = ({
           Fechar
         </Button>
         {cartItems.length > 0 && (
-          <Button onClick={handleSubmit} color="primary" variant="contained">
-            Confirmar Inscrição
+          <Button
+            onClick={() => router.push("/finalizar-inscricao")}
+            color="primary"
+            variant="contained"
+          >
+            Finalizar Inscrição
           </Button>
         )}
       </DialogActions>
