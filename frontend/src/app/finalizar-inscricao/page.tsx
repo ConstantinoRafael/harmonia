@@ -1,18 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 
 const FinalizarInscricao = () => {
   const router = useRouter();
 
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const [formData, setFormData] = useState({
-    nome: "",
+    name: "",
     email: "",
-    telefone: "",
-    dataNascimento: "",
+    phone: "",
+    birthday: "",
   });
+
+  // Recupera os itens do carrinho do localStorage ao montar a página
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cartItems");
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+  }, []);
 
   const formatDate = (value: string) => {
     let cleanValue = value.replace(/\D/g, ""); // Remove tudo que não é número
@@ -48,19 +67,45 @@ const FinalizarInscricao = () => {
     setFormData((prev) => ({
       ...prev,
       [name]:
-        name === "dataNascimento"
+        name === "birthday"
           ? formatDate(value)
-          : name === "telefone"
+          : name === "phone"
           ? formatPhoneNumber(value)
           : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Dados enviados:", formData);
-    alert("Inscrição finalizada com sucesso!");
-    router.push("/");
+
+    // Captura os IDs dos workshops
+    const workshopIds = cartItems.map((item) => item.id);
+
+    const payload = {
+      ...formData,
+      workshopIds,
+    };
+
+    console.log(payload);
+
+    try {
+      const response = await fetch("http://localhost:5000/registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        alert("Inscrição finalizada com sucesso!");
+        localStorage.removeItem("cartItems"); // Limpa o carrinho
+        router.push("/");
+      } else {
+        alert("Erro ao finalizar inscrição!");
+      }
+    } catch (error) {
+      console.error("Erro na inscrição:", error);
+      alert("Erro na inscrição. Tente novamente.");
+    }
   };
 
   return (
@@ -85,13 +130,37 @@ const FinalizarInscricao = () => {
         <Typography variant="h4" gutterBottom align="center">
           Finalizar Inscrição
         </Typography>
+
+        {/* Lista de Workshops Selecionados */}
+        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+          Workshops Selecionados:
+        </Typography>
+        {cartItems.length === 0 ? (
+          <Typography variant="body1">Nenhum workshop no carrinho.</Typography>
+        ) : (
+          <List>
+            {cartItems.map((item) => (
+              <ListItem key={item.id}>
+                <ListItemText
+                  primary={item.title}
+                  secondary={`Professor: ${item.professorName} - ${new Date(
+                    item.date
+                  ).toLocaleDateString("pt-BR")}`}
+                  sx={{ color: "#FFFFFF" }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        )}
+        <Divider sx={{ backgroundColor: "#FFFFFF", marginY: 2 }} />
+
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
             label="Nome"
             variant="outlined"
-            name="nome"
-            value={formData.nome}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             required
             sx={{
@@ -143,8 +212,8 @@ const FinalizarInscricao = () => {
             fullWidth
             label="Telefone"
             variant="outlined"
-            name="telefone"
-            value={formData.telefone}
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
             required
             placeholder="(XX) XXXXX-XXXX"
@@ -172,8 +241,8 @@ const FinalizarInscricao = () => {
             fullWidth
             label="Data de Nascimento"
             variant="outlined"
-            name="dataNascimento"
-            value={formData.dataNascimento}
+            name="birthday"
+            value={formData.birthday}
             onChange={handleChange}
             required
             placeholder="dd/mm/aaaa"

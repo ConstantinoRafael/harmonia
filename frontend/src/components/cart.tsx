@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -14,12 +14,17 @@ import {
   Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useRouter } from "next/navigation"; // Importa roteamento
+import { useRouter } from "next/navigation";
 
 const Cart = ({ open, onClose, cartItems, removeFromCart }: any) => {
-  const router = useRouter(); // Habilita navegação
+  const router = useRouter();
 
-  // Calcula o total (R$ 60 por workshop)
+  // Salva os itens do carrinho no localStorage sempre que ele for atualizado
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  // Calcula o total
   const total = cartItems.length * 60;
 
   return (
@@ -98,7 +103,10 @@ const Cart = ({ open, onClose, cartItems, removeFromCart }: any) => {
         </Button>
         {cartItems.length > 0 && (
           <Button
-            onClick={() => router.push("/finalizar-inscricao")}
+            onClick={() => {
+              localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Salva no localStorage
+              router.push("/finalizar-inscricao");
+            }}
             color="primary"
             variant="contained"
           >
