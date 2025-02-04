@@ -50,17 +50,9 @@ const WorkshopsInfantojuvenis = () => {
     const selectedWorkshop = workshops.find((w) => w.id === id);
     if (!selectedWorkshop) return;
 
-    // 🔹 Verifica se há conflito de horário antes de adicionar
-    if (hasTimeConflict(selectedWorkshop)) {
-      alert(
-        "Este workshop entra em conflito de horário com um que já está no carrinho!"
-      );
-      return;
-    }
-
     const workshopsToAdd = [selectedWorkshop];
 
-    // Se for "Parte 1", busca "Parte 2" correspondente
+    // 🔹 Busca "Parte 2" correspondente se for "Parte 1"
     if (selectedWorkshop.title.includes("Parte 1")) {
       const part2Workshop = workshops.find(
         (w) =>
@@ -71,7 +63,7 @@ const WorkshopsInfantojuvenis = () => {
       if (part2Workshop) workshopsToAdd.push(part2Workshop);
     }
 
-    // Se for "Parte 2", busca "Parte 1" correspondente
+    // 🔹 Busca "Parte 1" correspondente se for "Parte 2"
     if (selectedWorkshop.title.includes("Parte 2")) {
       const part1Workshop = workshops.find(
         (w) =>
@@ -82,7 +74,16 @@ const WorkshopsInfantojuvenis = () => {
       if (part1Workshop) workshopsToAdd.unshift(part1Workshop);
     }
 
-    // Evita duplicação no carrinho
+    // 🔹 Verifica se há conflito **apenas uma vez**
+    const hasConflict = workshopsToAdd.some((w) => hasTimeConflict(w));
+    if (hasConflict) {
+      alert(
+        "Um ou mais workshops entram em conflito de horário com o que já está no carrinho!"
+      );
+      return; // 🔹 Interrompe a adição ao carrinho
+    }
+
+    // 🔹 Evita duplicação no carrinho
     const newCart = [...cart];
     workshopsToAdd.forEach((w) => {
       if (!newCart.some((item) => item.id === w.id)) {
