@@ -1,9 +1,10 @@
 "use client";
 
-import { Box, Button, Typography } from "@mui/material";
-import Image from "next/image";
+import React from "react";
+import { Container, Typography, Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import LogoTergMusical from "../../public/assets/logo-terg-musical.jpeg";
+import Image from "next/image";
 
 const Home = () => {
   const router = useRouter();
@@ -11,84 +12,86 @@ const Home = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        textAlign: "center",
-        width: "100vw",
-        padding: 2,
         backgroundColor: "#000000",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
       }}
     >
-      {/* Logo */}
-      <Box sx={{ mb: 4 }}>
-        <Image
-          src={LogoTergMusical}
-          alt="Terg Musical Logo"
-          width={300}
-          priority
-        />
-      </Box>
-
-      {/* Título */}
-      <Typography variant="h5" gutterBottom>
-        Bem-vindo ao Terg Musical
-      </Typography>
-
-      {/* Botões de Navegação */}
-      <Box
+      <Container
+        maxWidth="sm"
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          mt: 3,
-          width: "100%",
-          alignItems: "center", // Centraliza os botões
+          backgroundColor: "#000000",
+          color: "#FFFFFF",
+          padding: 4,
+          borderRadius: 2,
         }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => router.push("/workshops")}
-          sx={{
-            textTransform: "none",
-            maxWidth: 300, // Limita a largura
-            width: "100%", // Garante responsividade
-            padding: "12px",
-          }}
-        >
-          WORKSHOPS
-        </Button>
+        {/* 🔹 LOGO */}
+        <Box sx={{ mb: 4 }}>
+          <Image
+            src={LogoTergMusical}
+            alt="Terg Musical Logo"
+            width={300}
+            priority
+          />
+        </Box>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          onClick={() => router.push("/workshops-infantojuvenis")}
-          sx={{
-            textTransform: "none",
-            maxWidth: 300, // Mantém um tamanho confortável
-            width: "100%",
-            padding: "12px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            whiteSpace: "pre-line",
-          }}
+        {/* 🔹 FRASE PROMOCIONAL */}
+        <Typography
+          variant="h5"
+          sx={{ color: "#FA1FF7", fontWeight: "bold", marginBottom: 2 }}
         >
-          WORKSHOPS INFANTOJUVENIS
-          <Typography
-            variant="caption"
-            component="span"
-            sx={{ fontSize: "0.75rem" }}
+          FEVEREIRO MUSICAL
+        </Typography>
+
+        {/* 🔹 DETALHES DO INVESTIMENTO */}
+        <Typography variant="h6" sx={{ color: "#FFFFFF" }}>
+          Valor por workshop: <strong>R$ 60,00</strong>
+        </Typography>
+
+        <Typography
+          variant="h6"
+          sx={{ color: "#FA1FF7", fontWeight: "bold", marginTop: 1 }}
+        >
+          A cada 5 workshops você ganha 1! 🎭✨
+        </Typography>
+
+        <Typography variant="h6" sx={{ color: "#FFFFFF", marginTop: 1 }}>
+          Desta forma, <strong>6 workshops por R$ 300,00</strong>
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{ color: "#FA1FF7", fontWeight: "bold", marginTop: 1 }}
+        >
+          (Os workshops contendo “Parte 1” e “Parte 2” são contabilizados como 2
+          workshops)
+        </Typography>
+
+        {/* 🔹 BOTÕES DE AÇÃO */}
+        <Box sx={{ marginTop: 3 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ marginBottom: 2, width: "100%" }}
+            onClick={() => router.push("/workshops")}
           >
-            (até 16 anos)
-          </Typography>
-        </Button>
-      </Box>
+            Ver Workshops
+          </Button>
+
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{ width: "100%" }}
+            onClick={() => router.push("/finalizar-inscricao")}
+          >
+            Finalizar Inscrição
+          </Button>
+        </Box>
+      </Container>
     </Box>
   );
 };
