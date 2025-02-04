@@ -12,6 +12,7 @@ model User {
   name        String
   email       String        @unique
   password    String?       // Agora opcional
+  phone       String
   isAdmin     Boolean       @default(false) 
   birthday    DateTime      // Data de nascimento do usuário
   createdAt   DateTime      @default(now())
