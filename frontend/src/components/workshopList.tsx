@@ -109,6 +109,7 @@ const WorkshopList: React.FC<WorkshopListProps> = ({
 
     handleClose();
   };
+  console.log(cart);
 
   return (
     <>
@@ -178,11 +179,25 @@ const WorkshopList: React.FC<WorkshopListProps> = ({
             }
             color="primary"
             variant="contained"
-            disabled={cart.some(
-              (item: any) => item.id === selectedWorkshop?.id
-            )}
+            disabled={
+              selectedWorkshop
+                ? cart.some((item) => item.id === selectedWorkshop.id)
+                : false
+            }
+            sx={{
+              color: "white", // 🔹 Cor branca no texto
+              backgroundColor: (theme) =>
+                cart.some((item) => item.id === selectedWorkshop?.id)
+                  ? theme.palette.grey[600] // 🔹 Cor de fundo quando desabilitado
+                  : theme.palette.primary.main,
+              "&.Mui-disabled": {
+                color: "white", // 🔹 Força a cor branca quando desabilitado
+                backgroundColor: "#555", // 🔹 Ajusta a cor de fundo para cinza mais escuro
+              },
+            }}
           >
-            {cart.some((item: any) => item.id === selectedWorkshop?.id)
+            {selectedWorkshop &&
+            cart.some((item) => item.id === selectedWorkshop.id)
               ? "Já no Carrinho"
               : "Adicionar ao Carrinho"}
           </Button>

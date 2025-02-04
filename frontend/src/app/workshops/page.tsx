@@ -175,9 +175,8 @@ const WorkshopsInfantojuvenis = () => {
         <WorkshopList
           workshops={workshops}
           addToCart={addToCart}
-          removeFromCart={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          removeFromCart={removeFromCart}
+          cart={cart}
         />
       </Box>
 
