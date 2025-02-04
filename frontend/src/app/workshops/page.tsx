@@ -28,16 +28,42 @@ const WorkshopsInfantojuvenis = () => {
       .catch((err) => console.error("Erro ao buscar workshops:", err));
   }, []);
 
+  // 🔹 Função para verificar conflito de horários
+  const hasTimeConflict = (newWorkshop: Workshop): boolean => {
+    const newStartTime = new Date(newWorkshop.date).getTime();
+    const newEndTime = newStartTime + newWorkshop.duration * 60000;
+
+    return cart.some((existingWorkshop) => {
+      const existingStartTime = new Date(existingWorkshop.date).getTime();
+      const existingEndTime =
+        existingStartTime + existingWorkshop.duration * 60000;
+
+      return (
+        (newStartTime >= existingStartTime && newStartTime < existingEndTime) || // Começa dentro de outro workshop
+        (newEndTime > existingStartTime && newEndTime <= existingEndTime) || // Termina dentro de outro workshop
+        (newStartTime <= existingStartTime && newEndTime >= existingEndTime) // Envolve completamente outro workshop
+      );
+    });
+  };
+
   const addToCart = (id: number) => {
-    const selectedWorkshop = workshops.find((w: any) => w.id === id);
+    const selectedWorkshop = workshops.find((w) => w.id === id);
     if (!selectedWorkshop) return;
+
+    // 🔹 Verifica se há conflito de horário antes de adicionar
+    if (hasTimeConflict(selectedWorkshop)) {
+      alert(
+        "Este workshop entra em conflito de horário com um que já está no carrinho!"
+      );
+      return;
+    }
 
     const workshopsToAdd = [selectedWorkshop];
 
     // Se for "Parte 1", busca "Parte 2" correspondente
     if (selectedWorkshop.title.includes("Parte 1")) {
       const part2Workshop = workshops.find(
-        (w: any) =>
+        (w) =>
           w.title.includes("Parte 2") &&
           w.title.replace("Parte 2", "").trim() ===
             selectedWorkshop.title.replace("Parte 1", "").trim()
@@ -48,7 +74,7 @@ const WorkshopsInfantojuvenis = () => {
     // Se for "Parte 2", busca "Parte 1" correspondente
     if (selectedWorkshop.title.includes("Parte 2")) {
       const part1Workshop = workshops.find(
-        (w: any) =>
+        (w) =>
           w.title.includes("Parte 1") &&
           w.title.replace("Parte 1", "").trim() ===
             selectedWorkshop.title.replace("Parte 2", "").trim()
@@ -75,7 +101,7 @@ const WorkshopsInfantojuvenis = () => {
   };
 
   const removeFromCart = (id: number) => {
-    const selectedWorkshop = cart.find((w: any) => w.id === id);
+    const selectedWorkshop = cart.find((w) => w.id === id);
     if (!selectedWorkshop) return;
 
     // Encontrar o "Par" correspondente
@@ -83,7 +109,7 @@ const WorkshopsInfantojuvenis = () => {
 
     if (selectedWorkshop.title.includes("Parte 1")) {
       const part2Workshop = cart.find(
-        (w: any) =>
+        (w) =>
           w.title.includes("Parte 2") &&
           w.title.replace("Parte 2", "").trim() ===
             selectedWorkshop.title.replace("Parte 1", "").trim()
@@ -93,7 +119,7 @@ const WorkshopsInfantojuvenis = () => {
 
     if (selectedWorkshop.title.includes("Parte 2")) {
       const part1Workshop = cart.find(
-        (w: any) =>
+        (w) =>
           w.title.includes("Parte 1") &&
           w.title.replace("Parte 1", "").trim() ===
             selectedWorkshop.title.replace("Parte 2", "").trim()
@@ -120,7 +146,7 @@ const WorkshopsInfantojuvenis = () => {
     })
       .then((res) => res.json())
       .then(() => {
-        alert("Registration submitted successfully!");
+        alert("Registro enviado com sucesso!");
         setCart([]);
         handleCartClose();
       });
@@ -129,7 +155,7 @@ const WorkshopsInfantojuvenis = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#000000", // Fundo preto igual à Home
+        backgroundColor: "#000000",
         minHeight: "100vh",
       }}
     >
@@ -138,7 +164,7 @@ const WorkshopsInfantojuvenis = () => {
         <Header cartCount={cart.length} onCartClick={handleCartOpen} />
       </Box>
 
-      {/* Lista de Workshops com fundo levemente mais claro */}
+      {/* Lista de Workshops */}
       <Box
         sx={{
           backgroundColor: "#121212",
