@@ -8,41 +8,49 @@ datasource db {
 }
 
 model User {
-  id          Int          @id @default(autoincrement()) // ID autoincremental
+  id          Int           @id @default(autoincrement()) 
   name        String
-  email       String       @unique
-  password    String       // Hash da senha
-  isAdmin     Boolean      @default(false) // Define se o usuário é administrador
-  age         Int          // Idade do usuário
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  email       String        @unique
+  password    String?       // Agora opcional
+  isAdmin     Boolean       @default(false) 
+  birthday    DateTime      // Data de nascimento do usuário
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   registrations Registration[]
 }
 
 model Workshop {
-  id              Int          @id @default(autoincrement()) // ID autoincremental
+  id              Int          @id @default(autoincrement()) 
   title           String
   description     String
-  professorName   String       // Nome do professor responsável pelo workshop
-  date            DateTime     // Data e hora do workshop
-  duration        Int          // Duração em minutos
-  capacity        Int          // Quantidade máxima de participantes
-  address         String       // Endereço do workshop
-  isInfantojuvenil Boolean    @default(false) // Indica se é um workshop infantojuvenil
-  registrations   Registration[]
+  professorName   String       
+  date            DateTime     
+  duration        Int          
+  capacity        Int          
+  address         String       
+  isInfantojuvenil Boolean    @default(false) 
+  registrations   RegistrationWorkshop[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  @@unique([date, duration], map: "workshop_date_duration_unique") // Evita conflitos de horários
+  @@unique([date, duration], map: "workshop_date_duration_unique") 
 }
 
 model Registration {
-  id          Int       @id @default(autoincrement()) // ID autoincremental
+  id          Int       @id @default(autoincrement()) 
   userId      Int
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workshopId  Int
-  workshop    Workshop  @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  workshops   RegistrationWorkshop[]
   createdAt   DateTime  @default(now())
 
-  @@unique([userId, workshopId], map: "registration_unique") // Garante que uma pessoa não se inscreva no mesmo workshop mais de uma vez
+  @@unique([userId], map: "registration_unique") 
+}
+
+model RegistrationWorkshop {
+  registrationId Int
+  workshopId     Int
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  workshop       Workshop     @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+
+  @@id([registrationId, workshopId]) // Define chave composta (evita duplicação)
 }
