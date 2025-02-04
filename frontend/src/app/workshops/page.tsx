@@ -18,6 +18,8 @@ const WorkshopsInfantojuvenis = () => {
   const [cart, setCart] = useState<Workshop[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
+  console.log(process.env.NEXT_PUBLIC_API_URL);
+
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/workshops?isInfantojuvenil=false`)
       .then((res) => res.json())
