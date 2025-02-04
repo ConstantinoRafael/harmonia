@@ -1,5 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
+
+interface Workshop {
+  id: number;
+  title: string;
+  professorName: string;
+  date: string;
+  duration: number;
+  description: string;
+}
+
+interface WorkshopListProps {
+  workshops: Workshop[];
+  addToCart: (id: number) => void;
+  cart?: Workshop[];
+}
 import {
   Card,
   CardContent,
@@ -15,8 +30,14 @@ import {
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info"; // Ícone ℹ️
 
-const WorkshopList = ({ workshops, addToCart, cart = [] }: any) => {
-  const [selectedWorkshop, setSelectedWorkshop] = useState<any>(null);
+const WorkshopList: React.FC<WorkshopListProps> = ({
+  workshops,
+  addToCart,
+  cart = [],
+}) => {
+  const [selectedWorkshop, setSelectedWorkshop] = useState<Workshop | null>(
+    null
+  );
   const [open, setOpen] = useState(false);
 
   const handleOpen = (workshop: any) => {
@@ -32,6 +53,8 @@ const WorkshopList = ({ workshops, addToCart, cart = [] }: any) => {
   // Função para formatar data e horário (dd/mm/aaaa - HH:mm às HH:mm)
   const formatDateTime = (dateString: string, duration: number) => {
     const startDate = new Date(dateString);
+    startDate.setHours(startDate.getHours() + 3); // Adiciona 3 horas
+
     const endDate = new Date(startDate.getTime() + duration * 60000);
 
     return `${startDate.toLocaleDateString("pt-BR", {

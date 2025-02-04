@@ -6,8 +6,6 @@ export const registrationController = {
     try {
       let { name, email, phone, birthday, workshopIds } = req.body;
 
-      console.log("Recebendo payload:", req.body);
-
       if (!name || !email || !phone || !birthday || !workshopIds?.length) {
         res.status(400).json({ message: "Todos os campos são obrigatórios!" });
         return;

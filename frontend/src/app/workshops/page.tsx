@@ -11,14 +11,15 @@ const WorkshopsInfantojuvenis = () => {
   interface Workshop {
     id: number;
     title: string;
-    // Add other properties as needed
+    professorName: string;
+    date: string;
+    duration: number;
+    description: string;
   }
 
   const [workshops, setWorkshops] = useState<Workshop[]>([]);
   const [cart, setCart] = useState<Workshop[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
-
-  console.log(process.env.NEXT_PUBLIC_API_URL);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/workshops?isInfantojuvenil=false`)
