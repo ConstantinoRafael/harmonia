@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Cart from "@/components/cart";
@@ -7,8 +8,14 @@ import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 
 const WorkshopsInfantojuvenis = () => {
-  const [workshops, setWorkshops] = useState([]);
-  const [cart, setCart] = useState([]);
+  interface Workshop {
+    id: number;
+    title: string;
+    // Add other properties as needed
+  }
+
+  const [workshops, setWorkshops] = useState<Workshop[]>([]);
+  const [cart, setCart] = useState<Workshop[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
@@ -22,7 +29,7 @@ const WorkshopsInfantojuvenis = () => {
     const selectedWorkshop = workshops.find((w: any) => w.id === id);
     if (!selectedWorkshop) return;
 
-    let workshopsToAdd = [selectedWorkshop];
+    const workshopsToAdd = [selectedWorkshop];
 
     // Se for "Parte 1", busca "Parte 2" correspondente
     if (selectedWorkshop.title.includes("Parte 1")) {
@@ -69,7 +76,7 @@ const WorkshopsInfantojuvenis = () => {
     if (!selectedWorkshop) return;
 
     // Encontrar o "Par" correspondente
-    let workshopsToRemove = [selectedWorkshop];
+    const workshopsToRemove = [selectedWorkshop];
 
     if (selectedWorkshop.title.includes("Parte 1")) {
       const part2Workshop = cart.find(

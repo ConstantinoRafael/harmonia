@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 const FinalizarInscricao = () => {
   const router = useRouter();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: "",
