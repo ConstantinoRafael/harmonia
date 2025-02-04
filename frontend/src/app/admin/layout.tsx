@@ -19,7 +19,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const drawerWidth = 240;
 
-export default function AdminLayout({ children }) {
+import { ReactNode } from "react";
+
+export default function AdminLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
 
@@ -27,7 +29,7 @@ export default function AdminLayout({ children }) {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: string) => {
     router.push(path);
     setMobileOpen(false); // Fecha o Drawer após a navegação
   };
