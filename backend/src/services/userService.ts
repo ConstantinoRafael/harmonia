@@ -9,6 +9,9 @@ export const userService = {
       throw new Error("User already exists");
     }
 
+    if (!userData.password) {
+      throw new Error("Password is required");
+    }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     const newUser = await userRepository.create({

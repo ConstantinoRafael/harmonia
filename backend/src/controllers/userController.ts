@@ -6,7 +6,14 @@ export const userController = {
     const { name, email, password } = req.body;
 
     try {
-      const newUser = await userService.create({ name, email, password });
+      const { phone, birthday } = req.body;
+      const newUser = await userService.create({
+        name,
+        email,
+        password,
+        phone,
+        birthday,
+      });
 
       const { password: _, ...userWithoutPassword } = newUser;
 
