@@ -25,8 +25,15 @@ const Cart = ({ open, onClose, cartItems, removeFromCart }: any) => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Calcula o total
-  const total = cartItems.length * 60;
+  // Define o preço de cada workshop
+  const pricePerWorkshop = 60;
+
+  // Aplica a lógica de desconto: a cada 6 workshops, o usuário paga por 5
+  const discountWorkshops = Math.floor(cartItems.length / 6); // Conta quantos descontos serão aplicados
+  const payableWorkshops = cartItems.length - discountWorkshops; // Quantidade de workshops que serão pagos
+
+  // Calcula o total com desconto
+  const total = payableWorkshops * pricePerWorkshop;
 
   return (
     <Dialog
@@ -84,15 +91,22 @@ const Cart = ({ open, onClose, cartItems, removeFromCart }: any) => {
             sx={{
               p: 2,
               display: "flex",
-              justifyContent: "space-between",
+              flexDirection: "column",
               backgroundColor: "#211D1D",
             }}
           >
             <Typography variant="h6" sx={{ color: "#FFFFFF" }}>
-              Total:
+              Total de Workshops: {cartItems.length}
             </Typography>
-            <Typography variant="h6" sx={{ color: "#FFFFFF" }}>
-              R$ {total.toFixed(2)}
+
+            {discountWorkshops > 0 && (
+              <Typography variant="body2" sx={{ color: "#FA1FF7" }}>
+                Promoção aplicada: {discountWorkshops} workshop(s) grátis!
+              </Typography>
+            )}
+
+            <Typography variant="h6" sx={{ color: "#FFFFFF", marginTop: 1 }}>
+              Total a pagar: R$ {total.toFixed(2)}
             </Typography>
           </Box>
         </>

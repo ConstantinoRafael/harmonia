@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -7,9 +8,6 @@ import {
   Button,
   Typography,
   Box,
-  List,
-  ListItem,
-  ListItemText,
   Divider,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -17,7 +15,6 @@ import { useRouter } from "next/navigation";
 const FinalizarInscricao = () => {
   const router = useRouter();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +23,6 @@ const FinalizarInscricao = () => {
     birthday: "",
   });
 
-  // Recupera os itens do carrinho do localStorage ao montar a página
   useEffect(() => {
     const storedCart = localStorage.getItem("cartItems");
     if (storedCart) {
@@ -75,11 +71,8 @@ const FinalizarInscricao = () => {
           : value,
     }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Captura os IDs dos workshops
     const workshopIds = cartItems.map((item) => item.id);
 
     const payload = {
@@ -100,7 +93,7 @@ const FinalizarInscricao = () => {
       if (response.ok) {
         alert("Inscrição finalizada com sucesso!");
         localStorage.removeItem("cartItems"); // Limpa o carrinho
-        router.push("/");
+        router.push("/confirmacao");
       } else {
         alert("Erro ao finalizar inscrição!");
       }
@@ -109,6 +102,12 @@ const FinalizarInscricao = () => {
       alert("Erro na inscrição. Tente novamente.");
     }
   };
+
+  // Cálculo do valor total com desconto
+  const pricePerWorkshop = 60;
+  const discountWorkshops = Math.floor(cartItems.length / 6); // Workshops gratuitos a cada 6
+  const payableWorkshops = cartItems.length - discountWorkshops; // Quantidade de workshops pagos
+  const total = payableWorkshops * pricePerWorkshop;
 
   return (
     <Box
@@ -133,28 +132,30 @@ const FinalizarInscricao = () => {
           Finalizar Inscrição
         </Typography>
 
-        {/* Lista de Workshops Selecionados */}
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
-          Workshops Selecionados:
-        </Typography>
-        {cartItems.length === 0 ? (
-          <Typography variant="body1">Nenhum workshop no carrinho.</Typography>
-        ) : (
-          <List>
-            {cartItems.map((item) => (
-              <ListItem key={item.id}>
-                <ListItemText
-                  primary={item.title}
-                  secondary={`Professor: ${item.professorName} - ${new Date(
-                    item.date
-                  ).toLocaleDateString("pt-BR")}`}
-                  sx={{ color: "#FFFFFF" }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        )}
         <Divider sx={{ backgroundColor: "#FFFFFF", marginY: 2 }} />
+
+        {/* Exibição do total a pagar */}
+        <Typography variant="h6" sx={{ marginBottom: 2, textAlign: "center" }}>
+          Total a pagar: <strong>R$ {total.toFixed(2)}</strong>
+        </Typography>
+
+        {/* Informação de pagamento via PIX */}
+        <Typography
+          variant="body1"
+          sx={{
+            textAlign: "center",
+            marginBottom: 3,
+            color: "#FA1FF7",
+            fontWeight: "bold",
+          }}
+        >
+          Para confirmar a inscrição, faça o pagamento via PIX para a chave:{" "}
+          <br />
+          <strong>Celular: 2199223-9843</strong>
+          <br />
+          Enviar comprovante para{" "}
+          <strong>harmoniavocalteatromusical@gmail.com</strong>
+        </Typography>
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -277,7 +278,7 @@ const FinalizarInscricao = () => {
               Cancelar
             </Button>
             <Button type="submit" variant="contained" color="primary">
-              Finalizar Inscrição
+              Enviar Inscrição
             </Button>
           </Box>
         </form>
