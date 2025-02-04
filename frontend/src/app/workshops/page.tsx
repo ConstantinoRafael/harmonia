@@ -146,7 +146,13 @@ const WorkshopsInfantojuvenis = () => {
           minHeight: "calc(100vh - 64px)",
         }}
       >
-        <WorkshopList workshops={workshops} addToCart={addToCart} />
+        <WorkshopList
+          workshops={workshops}
+          addToCart={addToCart}
+          removeFromCart={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </Box>
 
       {/* Carrinho */}

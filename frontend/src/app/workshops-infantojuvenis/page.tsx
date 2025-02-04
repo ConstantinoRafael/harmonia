@@ -11,7 +11,10 @@ const WorkshopsInfantojuvenis = () => {
   interface Workshop {
     id: number;
     title: string;
-    // Add other properties if needed
+    professorName: string;
+    date: string;
+    duration: number;
+    description: string;
   }
 
   const [workshops, setWorkshops] = useState<Workshop[]>([]);

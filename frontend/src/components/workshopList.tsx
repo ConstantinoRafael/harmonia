@@ -13,6 +13,7 @@ interface Workshop {
 interface WorkshopListProps {
   workshops: Workshop[];
   addToCart: (id: number) => void;
+  removeFromCart: (id: number) => void;
   cart?: Workshop[];
 }
 import {
