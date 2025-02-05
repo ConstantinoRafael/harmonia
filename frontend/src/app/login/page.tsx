@@ -1,15 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { TextField, Button, Box, Typography, Container } from "@mui/material";
-import Image from "next/image";
-import { useState } from "react";
-import Logo from "../../../public/assets/miniatura-harmonia-light.png";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  Container,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 
+// Esquema de validação com Yup
 const loginSchema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   password: yup
@@ -36,25 +43,20 @@ export default function Login() {
     setErrorMessage("");
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Credenciais inválidas");
+        throw new Error("Erro ao fazer login. Verifique suas credenciais.");
       }
 
-      const user = await response.json();
-
-      if (user.isAdmin) {
-        router.push("/admin");
-      } else {
-        router.push("/workshop");
-      }
+      router.push("/admin"); // Redireciona após login bem-sucedido
     } catch (error: any) {
       setErrorMessage(error.message);
     } finally {
@@ -63,87 +65,72 @@ export default function Login() {
   };
 
   return (
-    <Box
+    <Container
+      maxWidth="xs"
       sx={{
-        backgroundColor: "#E9E9E9", // Fundo com a cor do fundo da imagem
-        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
       }}
     >
-      {/* Imagem no topo */}
-
-      <Container
-        maxWidth="xs"
+      <Box
         sx={{
-          backgroundColor: "#FFF", // Fundo branco para o formulário
+          width: "100%",
+          padding: 4,
           borderRadius: 2,
-          p: 3,
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          boxShadow: 3,
+          textAlign: "center",
+          backgroundColor: "white",
         }}
       >
-        <Box sx={{ textAlign: "center", mb: 3 }}>
-          <Image
-            src={Logo} // Substitua pelo caminho correto
-            alt="Logo"
-          />
-        </Box>
-        <Typography
-          variant="h5"
-          sx={{
-            color: "#6985B5", // Azul semelhante ao texto da imagem
-            textAlign: "center",
-          }}
-        >
+        <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
           Login
         </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ mt: 3, width: "100%" }}
-        >
+
+        {errorMessage && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
-            label="Email"
             fullWidth
+            label="Email"
+            variant="outlined"
             margin="normal"
             {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
-            InputLabelProps={{ style: { color: "#6985B5" } }}
           />
           <TextField
+            fullWidth
             label="Senha"
             type="password"
-            fullWidth
+            variant="outlined"
             margin="normal"
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
-            InputLabelProps={{ style: { color: "#6985B5" } }}
           />
-          {errorMessage && (
-            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-              {errorMessage}
-            </Typography>
-          )}
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{
-              mt: 3,
-              backgroundColor: "#FFD700", // Botão amarelo
-              color: "#6985B5",
-              "&:hover": { backgroundColor: "#FFC107" },
-            }}
+            sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? "Entrando..." : "Entrar"}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Entrar"
+            )}
           </Button>
-        </Box>
-      </Container>
-    </Box>
+        </form>
+      </Box>
+    </Container>
   );
 }
