@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -19,6 +19,8 @@ import {
   IconButton,
   Tooltip,
   Box,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -26,14 +28,10 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 
-const initialWorkshops = [
-  { id: 1, title: "Workshop 1", description: "Descrição do Workshop 1" },
-  { id: 2, title: "Workshop 2", description: "Descrição do Workshop 2" },
-  // Adicione mais workshops conforme necessário
-];
-
 export default function WorkshopsPage() {
-  const [workshops, setWorkshops] = useState(initialWorkshops);
+  const [workshops, setWorkshops] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentWorkshop, setCurrentWorkshop] = useState({
@@ -42,6 +40,28 @@ export default function WorkshopsPage() {
     description: "",
   });
 
+  // 🔹 Buscar Workshops do Backend ao carregar a página
+  useEffect(() => {
+    async function fetchWorkshops() {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/workshops/admin`
+        );
+        if (!response.ok) {
+          throw new Error("Erro ao buscar workshops.");
+        }
+        const data = await response.json();
+        setWorkshops(data);
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchWorkshops();
+  }, []);
+
+  // 🔹 Abrir modal para Adicionar/Editar
   const handleClickOpen = (
     workshop = { id: 0, title: "", description: "" }
   ) => {
@@ -55,63 +75,48 @@ export default function WorkshopsPage() {
     setCurrentWorkshop({ id: 0, title: "", description: "" });
   };
 
-  const handleSave = () => {
-    if (isEditing) {
-      setWorkshops((prevWorkshops) =>
-        prevWorkshops.map((workshop) =>
-          workshop.id === currentWorkshop.id ? currentWorkshop : workshop
-        )
-      );
-    } else {
-      setWorkshops((prevWorkshops) => [
-        ...prevWorkshops,
-        { ...currentWorkshop, id: prevWorkshops.length + 1 },
-      ]);
-    }
-    handleClose();
-  };
-
-  const handleDelete = (id: number) => {
-    setWorkshops((prevWorkshops) =>
-      prevWorkshops.filter((workshop) => workshop.id !== id)
-    );
-  };
-
-  const handleChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-    setCurrentWorkshop((prevWorkshop) => ({ ...prevWorkshop, [name]: value }));
-  };
-
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
       <Box display="flex" mb={2}>
         <Box flexGrow={1}>
-          {/* Espaço reservado para outros elementos, se necessário */}
+          {loading ? (
+            <CircularProgress />
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : workshops.length === 0 ? (
+            <Typography>Nenhum workshop encontrado.</Typography>
+          ) : null}
         </Box>
-        <Button
+        {/* <Button
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
           onClick={() => handleClickOpen()}
         >
           Adicionar Workshop
-        </Button>
+        </Button> */}
       </Box>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Título</TableCell>
-              <TableCell>Descrição</TableCell>
-              <TableCell align="right">Ações</TableCell>
+              <TableCell>Professor</TableCell>
+              <TableCell>Inscritos</TableCell>{" "}
+              {/* 🔹 Adicionando coluna de inscritos */}
+              {/* <TableCell align="right">Ações</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
             {workshops.map((workshop) => (
               <TableRow key={workshop.id}>
                 <TableCell>{workshop.title}</TableCell>
-                <TableCell>{workshop.description}</TableCell>
-                <TableCell align="right">
+                <TableCell>{workshop.professorName}</TableCell>
+                <TableCell>
+                  {workshop._count?.registrations ?? 0}
+                </TableCell>{" "}
+                {/* 🔹 Agora exibindo corretamente os inscritos */}
+                {/* <TableCell align="right">
                   <Tooltip title="Editar">
                     <IconButton
                       color="primary"
@@ -128,44 +133,12 @@ export default function WorkshopsPage() {
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {isEditing ? "Editar Workshop" : "Adicionar Workshop"}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            label="Título"
-            name="title"
-            value={currentWorkshop.title}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            margin="dense"
-            label="Descrição"
-            name="description"
-            value={currentWorkshop.description}
-            onChange={handleChange}
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleSave} color="primary">
-            {isEditing ? "Salvar" : "Adicionar"}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Paper>
   );
 }
