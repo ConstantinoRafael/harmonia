@@ -35,10 +35,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   };
 
   const handleLogout = () => {
-    // Aqui você pode limpar o token do usuário
+    localStorage.removeItem("token"); // 🔹 Agora remove o token do localStorage
     console.log("Usuário deslogado");
-    router.push("/login"); // Redireciona para a tela de login
-    setMobileOpen(false); // Fecha o Drawer após o logout
+    router.push("/login"); // 🔹 Redireciona para a tela de login
+    setMobileOpen(false); // 🔹 Fecha o Drawer após o logout
   };
 
   const drawer = (
@@ -49,11 +49,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <ListItemText primary="Workshops" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton onClick={() => handleNavigation("/admin/users")}>
             <ListItemText primary="Usuários" />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
         <ListItem disablePadding>
           <ListItemButton onClick={handleLogout}>
             <ListItemText primary="Logout" />
