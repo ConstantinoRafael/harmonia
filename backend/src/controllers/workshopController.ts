@@ -59,4 +59,13 @@ export const workshopController = {
       res.status(400).json({ message: error.message });
     }
   },
+
+  async admin(req: Request, res: Response): Promise<void> {
+    try {
+      const workshops = await workshopService.getAllAdmin();
+      res.json(workshops);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };

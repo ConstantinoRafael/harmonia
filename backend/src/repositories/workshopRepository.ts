@@ -6,10 +6,24 @@ export const workshopRepository = {
     return prisma.workshop.create({ data: workshopData });
   },
 
-  async findById(id: number): Promise<Workshop | null> {
+  async findById(id: number) {
     return prisma.workshop.findUnique({
       where: { id },
-      include: { registrations: true },
+      include: {
+        registrations: {
+          include: {
+            registration: {
+              // 🔹 Acessa `registration` primeiro
+              include: {
+                user: {
+                  // 🔹 Agora conseguimos acessar o `user`
+                  select: { name: true, email: true, phone: true },
+                },
+              },
+            },
+          },
+        },
+      },
     });
   },
 
@@ -17,6 +31,19 @@ export const workshopRepository = {
     return prisma.workshop.findMany({
       where: isInfantojuvenil !== undefined ? { isInfantojuvenil } : {},
       include: { registrations: true },
+    });
+  },
+
+  async findAllAdmin() {
+    return prisma.workshop.findMany({
+      select: {
+        id: true,
+        title: true,
+        professorName: true,
+        _count: {
+          select: { registrations: true }, // Conta os inscritos
+        },
+      },
     });
   },
 

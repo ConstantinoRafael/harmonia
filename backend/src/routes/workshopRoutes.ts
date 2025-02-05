@@ -3,6 +3,7 @@ import { workshopController } from "../controllers/workshopController";
 
 const router = Router();
 
+router.get("/admin", workshopController.admin);
 router.post("/", workshopController.create);
 router.get("/", workshopController.getAll);
 router.get("/:id", workshopController.getById);
