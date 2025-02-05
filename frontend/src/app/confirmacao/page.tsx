@@ -32,7 +32,8 @@ const Confirmacao = () => {
         </Typography>
 
         <Typography variant="body1" sx={{ marginBottom: 3 }}>
-          Não esqueça de enviar o <strong>comprovante do PIX</strong> para o
+          Não esqueça de enviar o{" "}
+          <strong>comprovante do PIX (Celular: 2199223-9843)</strong> para o
           e-mail:
           <br />
           <strong style={{ color: "#FA1FF7" }}>
