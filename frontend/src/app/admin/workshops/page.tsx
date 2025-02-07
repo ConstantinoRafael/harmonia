@@ -3,6 +3,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -11,37 +12,18 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  IconButton,
-  Tooltip,
   Box,
   CircularProgress,
   Typography,
+  Link,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-} from "@mui/icons-material";
 
 export default function WorkshopsPage() {
+  const router = useRouter();
   const [workshops, setWorkshops] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentWorkshop, setCurrentWorkshop] = useState({
-    id: 0,
-    title: "",
-    description: "",
-  });
 
-  // 🔹 Buscar Workshops do Backend ao carregar a página
   useEffect(() => {
     async function fetchWorkshops() {
       try {
@@ -62,20 +44,6 @@ export default function WorkshopsPage() {
     fetchWorkshops();
   }, []);
 
-  // 🔹 Abrir modal para Adicionar/Editar
-  const handleClickOpen = (
-    workshop = { id: 0, title: "", description: "" }
-  ) => {
-    setIsEditing(!!workshop.id);
-    setCurrentWorkshop(workshop);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setCurrentWorkshop({ id: 0, title: "", description: "" });
-  };
-
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 2 }}>
       <Box display="flex" mb={2}>
@@ -88,14 +56,6 @@ export default function WorkshopsPage() {
             <Typography>Nenhum workshop encontrado.</Typography>
           ) : null}
         </Box>
-        {/* <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={() => handleClickOpen()}
-        >
-          Adicionar Workshop
-        </Button> */}
       </Box>
       <TableContainer>
         <Table>
@@ -103,38 +63,20 @@ export default function WorkshopsPage() {
             <TableRow>
               <TableCell>Título</TableCell>
               <TableCell>Professor</TableCell>
-              <TableCell>Inscritos</TableCell>{" "}
-              {/* 🔹 Adicionando coluna de inscritos */}
-              {/* <TableCell align="right">Ações</TableCell> */}
+              <TableCell>Inscritos</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {workshops.map((workshop) => (
-              <TableRow key={workshop.id}>
+              <TableRow
+                key={workshop.id}
+                hover
+                sx={{ cursor: "pointer" }}
+                onClick={() => router.push(`/admin/workshops/${workshop.id}`)}
+              >
                 <TableCell>{workshop.title}</TableCell>
                 <TableCell>{workshop.professorName}</TableCell>
-                <TableCell>
-                  {workshop._count?.registrations ?? 0}
-                </TableCell>{" "}
-                {/* 🔹 Agora exibindo corretamente os inscritos */}
-                {/* <TableCell align="right">
-                  <Tooltip title="Editar">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleClickOpen(workshop)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Excluir">
-                    <IconButton
-                      color="secondary"
-                      onClick={() => handleDelete(workshop.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </TableCell> */}
+                <TableCell>{workshop._count?.registrations ?? 0}</TableCell>
               </TableRow>
             ))}
           </TableBody>
