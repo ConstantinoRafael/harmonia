@@ -31,6 +31,7 @@ export const workshopRepository = {
     return prisma.workshop.findMany({
       where: isInfantojuvenil !== undefined ? { isInfantojuvenil } : {},
       include: { registrations: true },
+      orderBy: { date: "asc" },
     });
   },
 
@@ -44,6 +45,7 @@ export const workshopRepository = {
           select: { registrations: true }, // Conta os inscritos
         },
       },
+      orderBy: { date: "asc" },
     });
   },
 
