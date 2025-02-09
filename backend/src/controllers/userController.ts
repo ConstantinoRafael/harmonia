@@ -22,4 +22,28 @@ export const userController = {
       res.status(400).send({ message: error.message });
     }
   },
+
+  async getUserWorkshops(req: Request, res: Response) {
+    const userId = parseInt(req.params.userId);
+
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "Invalid userId" });
+    }
+
+    try {
+      const userData = await userService.getUserWorkshops(userId);
+      res.json(userData);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user workshops" });
+    }
+  },
+
+  async getAllUsersWithWorkshopCount(req: Request, res: Response) {
+    try {
+      const users = await userService.getAllUsersWithWorkshopCount();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch users list" });
+    }
+  },
 };

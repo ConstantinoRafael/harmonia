@@ -21,4 +21,36 @@ export const userService = {
 
     return newUser;
   },
+
+  async getUserWorkshops(userId: number) {
+    const userData = await userRepository.findUserWorkshops(userId);
+
+    if (!userData) {
+      throw new Error("User not found");
+    }
+
+    return {
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone,
+      workshops: userData.registrations.flatMap((reg) =>
+        reg.workshops.map((w) => w.workshop)
+      ),
+    };
+  },
+
+  async getAllUsersWithWorkshopCount() {
+    const users = await userRepository.findAllUsersWithWorkshopCount();
+
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      workshopCount: new Set(
+        user.registrations.flatMap((r) => r.workshops.map((w) => w.workshopId))
+      ).size, // Conta workshops únicos
+    }));
+  },
 };
