@@ -53,4 +53,22 @@ export const userService = {
       ).size, // Conta workshops únicos
     }));
   },
+
+  async getUserWorkshopsByEmail(email: string) {
+    const userData = await userRepository.findUserWorkshopsByEmail(email);
+
+    if (!userData) {
+      throw new Error("User not found");
+    }
+
+    return {
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone,
+      workshops: userData.registrations.flatMap(
+        (reg) => reg.workshops.map((w) => w.workshop.title) // 🔹 Apenas o nome do workshop
+      ),
+    };
+  },
 };

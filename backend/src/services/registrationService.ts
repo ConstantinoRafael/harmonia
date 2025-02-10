@@ -12,6 +12,8 @@ export const registrationService = {
     // Verifica se o usuário já existe
     let user = await prisma.user.findUnique({ where: { email } });
 
+    console.log(user);
+
     if (!user) {
       // Cria o usuário se não existir
       user = await prisma.user.create({

@@ -46,4 +46,23 @@ export const userController = {
       res.status(500).json({ error: "Failed to fetch users list" });
     }
   },
+
+  async getUserWorkshopsByEmail(req: Request, res: Response) {
+    const { email } = req.query;
+
+    if (!email || typeof email !== "string") {
+      res.status(400).json({ error: "Invalid or missing email parameter" });
+    }
+
+    try {
+      if (typeof email === "string") {
+        const userData = await userService.getUserWorkshopsByEmail(email);
+        res.json(userData);
+      } else {
+        res.status(400).json({ error: "Invalid email parameter" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch user workshops" });
+    }
+  },
 };

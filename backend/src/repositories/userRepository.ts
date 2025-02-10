@@ -53,4 +53,30 @@ export const userRepository = {
       },
     });
   },
+
+  async findUserWorkshopsByEmail(email: string) {
+    return prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        registrations: {
+          select: {
+            workshops: {
+              select: {
+                workshop: {
+                  select: {
+                    title: true,
+                    date: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  },
 };
