@@ -43,8 +43,6 @@ model Registration {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workshops   RegistrationWorkshop[]
   createdAt   DateTime  @default(now())
-
-  @@unique([userId], map: "registration_unique") 
 }
 
 model RegistrationWorkshop {
