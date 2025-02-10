@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TERG Muscial",
+  title: "TERG Musical",
   description: "Terg musical app",
 };
 
