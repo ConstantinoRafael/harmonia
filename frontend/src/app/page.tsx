@@ -72,7 +72,7 @@ const Home = () => {
         </Typography>
 
         {/* 🔹 FRASE COM LINK PARA BUSCA PELO EMAIL */}
-        <Typography
+        {/* <Typography
           variant="body1"
           sx={{
             color: "#FA1FF7",
@@ -84,7 +84,7 @@ const Home = () => {
           onClick={() => router.push("/buscar-workshops")}
         >
           Quer saber em quais workshops se inscreveu?
-        </Typography>
+        </Typography> */}
 
         {/* Botões de Navegação */}
         <Box
