@@ -15,6 +15,8 @@ const WorkshopsInfantojuvenis = () => {
     date: string;
     duration: number;
     description: string;
+    capacity: number;
+    registrations: any[];
   }
 
   const [workshops, setWorkshops] = useState<Workshop[]>([]);

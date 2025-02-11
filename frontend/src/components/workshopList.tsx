@@ -9,7 +9,7 @@ interface Workshop {
   duration: number;
   description: string;
   capacity: number; // Número máximo de inscrições
-  registrations: Array<any>; // Inscritos (pode ser um array de objetos de usuários)
+  registrations: Array<any>; // Inscritos (pode ser um array de objetos de usuários)S
 }
 
 interface WorkshopListProps {
@@ -17,6 +17,7 @@ interface WorkshopListProps {
   addToCart: (id: number) => void;
   removeFromCart: (id: number) => void;
   cart?: Workshop[];
+  capacity?: number;
 }
 import {
   Card,
