@@ -8,6 +8,8 @@ interface Workshop {
   date: string;
   duration: number;
   description: string;
+  capacity: number; // Número máximo de inscrições
+  registrations: Array<any>; // Inscritos (pode ser um array de objetos de usuários)
 }
 
 interface WorkshopListProps {
@@ -181,24 +183,32 @@ const WorkshopList: React.FC<WorkshopListProps> = ({
             variant="contained"
             disabled={
               selectedWorkshop
-                ? cart.some((item) => item.id === selectedWorkshop.id)
+                ? cart.some((item) => item.id === selectedWorkshop.id) ||
+                  (selectedWorkshop?.registrations?.length ?? 0) >=
+                    (selectedWorkshop?.capacity ?? 0)
                 : false
             }
             sx={{
-              color: "white", // 🔹 Cor branca no texto
+              color: "white",
               backgroundColor: (theme) =>
-                cart.some((item) => item.id === selectedWorkshop?.id)
-                  ? theme.palette.grey[600] // 🔹 Cor de fundo quando desabilitado
+                (selectedWorkshop?.registrations?.length ?? 0) >=
+                (selectedWorkshop?.capacity ?? 0)
+                  ? theme.palette.grey[600] // 🔹 Cinza para indicar esgotado
+                  : cart.some((item) => item.id === selectedWorkshop?.id)
+                  ? theme.palette.grey[600]
                   : theme.palette.primary.main,
               "&.Mui-disabled": {
-                color: "white", // 🔹 Força a cor branca quando desabilitado
-                backgroundColor: "#555", // 🔹 Ajusta a cor de fundo para cinza mais escuro
+                color: "white",
+                backgroundColor: "#555",
               },
             }}
           >
             {selectedWorkshop &&
             cart.some((item) => item.id === selectedWorkshop.id)
               ? "Já no Carrinho"
+              : (selectedWorkshop?.registrations?.length ?? 0) >=
+                (selectedWorkshop?.capacity ?? 0)
+              ? "Vagas Esgotadas"
               : "Adicionar ao Carrinho"}
           </Button>
         </DialogActions>
