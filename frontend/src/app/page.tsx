@@ -38,17 +38,21 @@ const Home = () => {
             priority
           />
         </Box>
-
-        {/* 🔹 FRASE PROMOCIONAL */}
+        <Typography
+          variant="h5"
+          sx={{ color: "#FA1FF7", fontWeight: "bold", marginBottom: 2 }}
+        >
+          Em construção...
+        </Typography>
+        {/* 🔹 FRASE PROMOCIONAL
         <Typography
           variant="h5"
           sx={{ color: "#FA1FF7", fontWeight: "bold", marginBottom: 2 }}
         >
           FEVEREIRO MUSICAL
-        </Typography>
-
+        </Typography> */}
         {/* 🔹 DETALHES DO INVESTIMENTO */}
-        <Typography variant="h6" sx={{ color: "#FFFFFF" }}>
+        {/* <Typography variant="h6" sx={{ color: "#FFFFFF" }}>
           Valor por workshop: <strong>R$ 60,00</strong>
         </Typography>
 
@@ -69,8 +73,7 @@ const Home = () => {
         >
           (Os workshops contendo “Parte 1” e “Parte 2” são contabilizados como 2
           workshops)
-        </Typography>
-
+        </Typography> */}
         {/* 🔹 FRASE COM LINK PARA BUSCA PELO EMAIL */}
         {/* <Typography
           variant="body1"
@@ -85,9 +88,8 @@ const Home = () => {
         >
           Quer saber em quais workshops se inscreveu?
         </Typography> */}
-
         {/* Botões de Navegação */}
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -137,7 +139,7 @@ const Home = () => {
               (até 16 anos)
             </Typography>
           </Button>
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   );
